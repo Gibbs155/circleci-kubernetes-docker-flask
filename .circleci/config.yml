@@ -1,5 +1,19 @@
 jobs:
   test-cluster:
+    executor: aws-eks/python3
+    parameters:
+      cluster-name:
+        description: |
+          Name of the EKS cluster
+        type: string
+    steps:
+      - kubernetes/install
+      - aws-eks/update-kubeconfig-with-authenticator:
+          cluster-name: << parameters.cluster-name >>
+      - run:
+          command: |
+            kubectl get services && sleep 300
+          name: Test cluster
     aws-eks/install-eksctl:
       steps:
           - run:
@@ -19,7 +33,6 @@ jobs:
               fi
               $SUDO mv eksctl_download/eksctl /usr/local/bin/
               rmdir eksctl_download
-              eksctl version
 orbs:
   aws-eks: circleci/aws-eks@0.2.3
   kubernetes: circleci/kubernetes@0.4.0
