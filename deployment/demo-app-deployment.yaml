@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demoapp
+  labels:
+    app: demo
+spec:
+  selector:
+    matchLabels:
+      app: demo
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: demo
+    spec:
+      containers:
+      - name: app
+        image: lexact/flask-circleci
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        env:
+        - name: VERSION_INFO
+          value: "1.00"
+        - name: BUILD_DATE
+          value: "21/05/2023"
+        ports:
+        - containerPort: 8080
