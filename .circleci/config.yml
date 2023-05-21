@@ -28,5 +28,4 @@ workflows:
   deployment:
     jobs:
       - aws-eks/install-eksctl:
-        id: install-eksctl-job
         requires:
