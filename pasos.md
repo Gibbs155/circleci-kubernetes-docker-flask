@@ -26,3 +26,12 @@ minikube service demoapp
 curl http://192.168.49.2:32409
 
 minikube tunnel
+
+# Creando repositorio de github
+git init
+git add .
+git commit -m "Primer commit"
+git remote add origin https://github.com/Gibbs155/circleci-kubernetes-docker-flask
+git push -u origin master
+
+# Configurar entorno circleci   <-->  https://circleci.com/
