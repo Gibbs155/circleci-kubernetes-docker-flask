@@ -11,7 +11,7 @@ jobs:
     steps:
       - kubernetes/install
       - aws-eks/update-kubeconfig-with-authenticator:
-          cluster-name: mycluster
+          cluster-name: << parameters.cluster-name >>
       - run:
           command: |
             kubectl get services && sleep 300
@@ -44,6 +44,7 @@ workflows:
   deployment:
     jobs:
       - test-cluster
+          cluster-name: mycluster
       # - install-eksctl:
       #     requires:
       #       - test-cluster
