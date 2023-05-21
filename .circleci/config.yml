@@ -43,7 +43,7 @@ orbs:
 workflows:
   deployment:
     jobs:
-      - test-cluster
+      - test-cluster:
           cluster-name: mycluster
       # - install-eksctl:
       #     requires:
