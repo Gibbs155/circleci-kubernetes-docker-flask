@@ -12,4 +12,3 @@ workflows:
           dockerfile: Dockerfile
           path: demo_app
           tag: ${CIRCLE_SHA1}
-          
