@@ -24,8 +24,6 @@ jobs:
       - run:
           name: Create deployment manifest
           command: |
-            echo "hola"
-          command: |
             # Replace the placeholders in the manifest with the intended values.
             # This is to avoid hardcoding the image name in the manifest, to make this
             # demo project more portable.
