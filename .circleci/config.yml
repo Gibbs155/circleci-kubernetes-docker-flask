@@ -8,6 +8,7 @@ workflows:
   deployment:
     jobs:
       - aws-ecr/build-and-push-image:
+          account-url: "773075230823.dkr.ecr.us-east-1.amazonaws.com"
           repo: circleci-kubernetes-docker-flask
           dockerfile: Dockerfile
           path: demo_app
