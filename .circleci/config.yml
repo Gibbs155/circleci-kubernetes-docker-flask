@@ -2,11 +2,12 @@ version: 2.1
 
 jobs:
   aws-eks/install-eksctl:
+    executor: aws-eks/python3
     steps:
       - run:
-        name: Install the eksctl tool
-        command: |
-          echo hola
+          name: Install the eksctl tool
+          command: |
+            echo "hola"
 orbs:
   aws-eks: circleci/aws-eks@0.2.3
   kubernetes: circleci/kubernetes@0.4.0
@@ -14,4 +15,4 @@ orbs:
 workflows:
   deployment:
     jobs:
-      - aws-eks/install-eksctl:
+      - aws-eks/install-eksctl
