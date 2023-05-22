@@ -41,6 +41,10 @@ orbs:
 workflows:
   deployment:
     jobs:
+      - aws-eks/install-eksctl:
+        requires:
+
       - aws-eks/create-cluster:
           cluster-name: eks-orb-demo-app-deployment
           aws-region: $AWS_REGION
+          show-eksctl-command: true
