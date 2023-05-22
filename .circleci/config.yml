@@ -3,7 +3,7 @@ version: 2.1
 orbs:
   aws-eks: circleci/aws-eks@1.0.0
   kubernetes: circleci/kubernetes@1.0.1
-  aws-ecr: circleci/aws-ecr@0.0.2
+  aws-ecr: circleci/aws-ecr@6.8.2
 
 workflows:
   deployment:
