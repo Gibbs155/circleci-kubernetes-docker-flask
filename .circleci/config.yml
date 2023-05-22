@@ -34,8 +34,8 @@ jobs:
                 << parameters.version-info >>|g" > deployment/demo-app-deployment.yaml
 version: 2.1
 orbs:
-  aws-eks: circleci/aws-eks@0.2.3
-  kubernetes: circleci/kubernetes@0.4.0
+  aws-eks: circleci/aws-eks@1.0.0
+  kubernetes: circleci/kubernetes@1.0.1
   aws-ecr: circleci/aws-ecr@7.2.0
 
 workflows:
