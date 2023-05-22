@@ -33,7 +33,7 @@ jobs:
                 g;s|BUILD_DATE_VALUE|$BUILD_DATE|g;s|VERSION_INFO_VALUE|\
                 << parameters.version-info >>|g" > deployment/demo-app-deployment.yaml
     
-  aws-eks/install-eksctl:
+  install-eksctl:
     steps:
       - run:
           name: Install the eksctl tool
@@ -62,7 +62,7 @@ orbs:
 workflows:
   deployment:
     jobs:
-      - aws-eks/install-eksctl
+      - install-eksctl
 
       - aws-eks/create-cluster:
           cluster-name: eks-orb-demo-app-deployment
