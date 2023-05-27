@@ -14,8 +14,7 @@ workflows:
           path: demo_app
           tag: ${CIRCLE_SHA1}
       - aws-eks/create-cluster:
-          cluster-name: eks-orb-demo-app-deployment
+          cluster-name: eks-app-deployment
           aws-region: $AWS_REGION 
-          show-eksctl-command: true
           requires:
             - aws-ecr/build-and-push-image
