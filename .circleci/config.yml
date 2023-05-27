@@ -1,41 +1,3 @@
-jobs:
-  test-cluster:
-    executor: aws-eks/python3
-    parameters:
-      cluster-name:
-        description: |
-          Name of the EKS cluster
-        type: string
-    steps:
-      - kubernetes/install
-      - aws-eks/update-kubeconfig-with-authenticator:
-          cluster-name: << parameters.cluster-name >>
-      - run:
-          command: |
-            kubectl get services && sleep 300
-          name: Test cluster
-    aws-eks/install-eksctl:
-      steps:
-          - run:
-            name: Install the eksctl tool
-            command: |
-              if which eksctl > /dev/null; then
-                echo "eksctl is already installed"
-                exit 0
-              fi
-              mkdir -p eksctl_download
-              curl --silent --location --retry 5 "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" \
-                | tar xz -C eksctl_download
-              chmod +x eksctl_download/eksctl
-              SUDO=""
-              if [ $(id -u) -ne 0 ] && which sudo > /dev/null ; then
-                SUDO="sudo"
-              fi
-              $SUDO mv eksctl_download/eksctl /usr/local/bin/
-              rmdir eksctl_download
-
-
-
 version: 2.1
 orbs:
   aws-eks: circleci/aws-eks@1.0.0
@@ -51,10 +13,6 @@ workflows:
           dockerfile: Dockerfile
           path: demo_app
           tag: ${CIRCLE_SHA1}
-
-      - aws-eks/install-eksctl:
-          requires: 
-              - aws-ecr/build-and-push-image
 
       - aws-eks/create-cluster:
           cluster-name: eks-app-deployment
