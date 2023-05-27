@@ -8,7 +8,8 @@ workflows:
   deployment:
     jobs:
       - aws-ecr/build-and-push-image:
-          repo: circleci-kubernetes-docker-flask
+          account-url: circleci-kubernetes-docker-flask
+          repo: eks_orb_demo_app
           dockerfile: Dockerfile
           path: demo_app
           tag: ${CIRCLE_SHA1}

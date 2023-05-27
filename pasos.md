@@ -1,4 +1,4 @@
-
+# PARTE 1
 # Instalar Docker previamente
 docker login
 docker build -t lexact/flask-circleci:latest .
@@ -25,8 +25,10 @@ minikube service demoapp
 |-----------|---------|-------------|---------------------------| -->
 curl http://192.168.49.2:32409
 
-minikube tunnel
+<!-- minikube tunnel -->
 
+
+# PARTE 2
 # Creando repositorio de github
 git init
 git add .
