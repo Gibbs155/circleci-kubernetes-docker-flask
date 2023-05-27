@@ -13,10 +13,10 @@ workflows:
           dockerfile: Dockerfile
           path: demo_app
           tag: ${CIRCLE_SHA1}
-          
+
       - aws-eks/install-eksctl:
-        requires: 
-            - aws-ecr/build-and-push-image
+          requires: 
+              - aws-ecr/build-and-push-image
 
       - aws-eks/create-cluster:
           cluster-name: eks-app-deployment
