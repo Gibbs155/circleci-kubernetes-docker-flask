@@ -1,67 +1,48 @@
-version: 2.1
 jobs:
-  build:
-    docker:
-      - image: circleci/python:3.7
-
+  run-install-eksctl:
+    executor: circleci/python:3.7
+    
     steps:
       - checkout
-
-      - setup_remote_docker:
-          version: 19.03.13
-
       - run:
-          name: Install and configure kubectl
+          name: Install the eksctl tool
           command: |
-            sudo apt-get update && sudo apt-get install -y apt-transport-https
-            curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-            echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
-            sudo apt-get update
-            sudo apt-get install -y kubectl
+            if which eksctl > /dev/null; then
+              echo "eksctl is already installed"
+              exit 0
+            fi
+            mkdir -p eksctl_download
+            curl --silent --location --retry 5 "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" \
+              | tar xz -C eksctl_download
+            chmod +x eksctl_download/eksctl
+            SUDO=""
+            if [ $(id -u) -ne 0 ] && which sudo > /dev/null ; then
+              SUDO="sudo"
+            fi
+            $SUDO mv eksctl_download/eksctl /usr/local/bin/
+            rmdir eksctl_download
 
-      - run:
-          name: Create Kubernetes cluster
-          command: |
-            # Crea aquí tu clúster de Kubernetes según tus necesidades
-            # Por ejemplo, podrías usar un proveedor de nube como GKE o EKS
-            # y configurar tu clúster utilizando herramientas como kops o Terraform
 
-      - run:
-          name: Deploy application to Kubernetes
-          command: |
-            # Realiza aquí la tarea de despliegue de tu aplicación en el clúster
-            # Puedes usar kubectl para aplicar los archivos de configuración de Kubernetes
-
-      - run:
-          name: Verify application deployment
-          command: |
-            # Realiza aquí la verificación de que tu aplicación se ha desplegado correctamente
-            # Puedes usar kubectl para obtener información del clúster y verificar los recursos
+version: 2.1
+orbs:
+  aws-eks: circleci/aws-eks@0.2.3
+  kubernetes: circleci/kubernetes@0.4.0
+  aws-ecr: circleci/aws-ecr@7.2.0
 
 workflows:
-  version: 2
-  build-and-deploy:
+  deployment:
     jobs:
-      - build
+      - aws-ecr/build-and-push-image:
+          account-url: AWS_ECR_URL # 773075230823.dkr.ecr.us-east-1.amazonaws.com
+          repo: circleci-kubernetes-docker-flask
+          dockerfile: Dockerfile
+          path: demo_app
+          tag: ${CIRCLE_SHA1}
+      
+      - run-install-eksctl
 
-# version: 2.1
-# orbs:
-#   aws-eks: circleci/aws-eks@0.2.3
-#   kubernetes: circleci/kubernetes@0.4.0
-#   aws-ecr: circleci/aws-ecr@7.2.0
-
-# workflows:
-#   deployment:
-#     jobs:
-#       - aws-ecr/build-and-push-image:
-#           account-url: AWS_ECR_URL # 773075230823.dkr.ecr.us-east-1.amazonaws.com
-#           repo: circleci-kubernetes-docker-flask
-#           dockerfile: Dockerfile
-#           path: demo_app
-#           tag: ${CIRCLE_SHA1}
-
-#       - aws-eks/create-cluster:
-#           cluster-name: eks-app-deployment
-#           aws-region: $AWS_REGION 
-#           requires:
-#             - aws-ecr/build-and-push-image
+      - aws-eks/create-cluster:
+          cluster-name: eks-app-deployment
+          aws-region: $AWS_REGION 
+          requires:
+            - aws-ecr/build-and-push-image
