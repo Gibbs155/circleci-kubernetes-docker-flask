@@ -1,6 +1,6 @@
 jobs:
   run-install-eksctl:
-    executor: circleci/python:3.7
+    executor: aws-eks/python3
     
     steps:
       - checkout
