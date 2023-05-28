@@ -1,3 +1,9 @@
+version: 2.1
+orbs:
+  aws-eks: circleci/aws-eks@0.2.3
+  kubernetes: circleci/kubernetes@0.4.0
+  aws-ecr: circleci/aws-ecr@7.2.0
+
 jobs:
   run-install-eksctl:
     executor: aws-eks/python3
@@ -21,13 +27,7 @@ jobs:
             fi
             $SUDO mv eksctl_download/eksctl /usr/local/bin/
             rmdir eksctl_download
-
-
-version: 2.1
-orbs:
-  aws-eks: circleci/aws-eks@0.2.3
-  kubernetes: circleci/kubernetes@0.4.0
-  aws-ecr: circleci/aws-ecr@7.2.0
+            eksctl version
 
 workflows:
   deployment:
