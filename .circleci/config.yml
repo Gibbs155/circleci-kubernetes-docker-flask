@@ -47,4 +47,4 @@ workflows:
           cluster-name: eks-app-deployment
           aws-region: $AWS_REGION 
           requires:
-            - aws-ecr/run-install-eksctl
+            - run-install-eksctl
